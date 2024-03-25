@@ -19,7 +19,7 @@ Java, Spring Boot, IntelliJ, MariaDb, Redis, Jenkins
 
 * 해당 프로젝트의 요구사항은 다음과 같습니다.
 
-[wikiLink](https://ginger-softball-b5b.notion.site/de705f209cce4340809b50f670fab6c9?pvs=4)
+[wikiLink](https://github.com/leemanbokgoo/shareChat/wiki)
 
 
 ---
