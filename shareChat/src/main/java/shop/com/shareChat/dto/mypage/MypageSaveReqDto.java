@@ -30,6 +30,14 @@ public class MypageSaveReqDto {
     @Size(min = 1, max = 1000)
     private String intro;
 
+    @Builder
+    public MypageSaveReqDto(String title, int career, String job, String intro) {
+        this.title = title;
+        this.career = career;
+        this.job = job;
+        this.intro = intro;
+    }
+
     public Mypage toEntity(User user){
         return Mypage.builder()
                 .title(this.title)

@@ -25,6 +25,7 @@ public class MypageSaveResDto {
     @Size(min = 1, max = 1000)
     private String intro;
 
+
     public MypageSaveResDto(Mypage mypage) {
         this.id = mypage.getId();
         this.title = mypage.getTitle();
