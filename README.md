@@ -10,7 +10,7 @@
 Java, Spring Boot, IntelliJ, MariaDb, Redis, Jenkins 
 
 ### ERD
-<img width="826" alt="image" src="https://github.com/leemanbokgoo/shareChat/assets/123913164/a40f8112-512d-4dba-b00a-defbd9969ea2">
+![image](https://github.com/leemanbokgoo/shareChat/assets/123913164/37120677-3652-4db1-a45d-c15fa0c4a52f)
 
 ---
 
