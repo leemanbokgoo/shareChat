@@ -9,11 +9,12 @@ public enum ErrorCode {
 
     //400 BAD_REQUEST 잘못된 요청
     INVALID_PARAMETER(400, "요청 값을 확인해주세요."),
-    USER_EXIST(404, "동일한 사용자가 존재합니다."),
+    USER_EXIST(400, "동일한 사용자가 존재합니다."),
     VALIDATION_ERROR(402, "잘못된 요청입니다."),
 
     //404 NOT_FOUND 잘못된 리소스 접근
     USER_NOT_FOUND(404, "존재하지 않는 사용자 ID 입니다."),
+    MYPAGE_NOT_FOUND(404, "존재하지 않는 마이페이지 입니다."),
 
     // 권한 관련
     NOT_USER(401, "로그인을 해주세요."),

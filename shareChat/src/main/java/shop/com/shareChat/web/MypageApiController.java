@@ -12,8 +12,10 @@ import shop.com.shareChat.confing.auth.LoginUser;
 import shop.com.shareChat.confing.auth.dto.SessionUser;
 import shop.com.shareChat.domain.user.User;
 import shop.com.shareChat.dto.HttpResponseDto;
+import shop.com.shareChat.dto.mypage.MyPageUpdateResDto;
 import shop.com.shareChat.dto.mypage.MypageSaveReqDto;
 import shop.com.shareChat.dto.mypage.MypageSaveResDto;
+import shop.com.shareChat.dto.mypage.MypageUpdateReqDto;
 import shop.com.shareChat.ex.CustomValidationException;
 import shop.com.shareChat.ex.ErrorCode;
 import shop.com.shareChat.service.MypageService;
@@ -25,14 +27,25 @@ public class MypageApiController {
 
     private final MypageService mypageService;
     private final HttpSession session;
-    @PostMapping("/save")
+    @PostMapping("/")
     @LoginCheck
     public ResponseEntity<?> join(@RequestBody @Valid MypageSaveReqDto saveReqDto, BindingResult bindingResult,@LoginUser SessionUser sessionUser) {
         if (bindingResult.hasErrors()) {
             throw new CustomValidationException(ErrorCode.VALIDATION_ERROR, null);
         }
-        MypageSaveResDto joinRespDto = mypageService.seveMypage(saveReqDto, sessionUser.getUsername());
+        MypageSaveResDto joinRespDto = mypageService.seve(saveReqDto, sessionUser.getUsername());
         return new ResponseEntity<>(new HttpResponseDto<>(1, "마이페이지 등록 성공", joinRespDto), HttpStatus.CREATED);
     }
 
+    // 수정
+    @PutMapping("/{mypageId}")
+    @LoginCheck
+    public ResponseEntity<?> update(@RequestBody @Valid MypageUpdateReqDto reqDto , BindingResult bindingResult, @PathVariable Long mypageId){
+        if (bindingResult.hasErrors()) {
+            throw new CustomValidationException(ErrorCode.VALIDATION_ERROR, null);
+        }
+        MyPageUpdateResDto resDto = mypageService.update(reqDto, mypageId);
+        return new ResponseEntity<>(new HttpResponseDto<>(1, "마이페이지 등록 성공", resDto), HttpStatus.CREATED);
+
+    }
 }

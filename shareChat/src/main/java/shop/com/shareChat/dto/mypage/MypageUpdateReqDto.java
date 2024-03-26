@@ -3,14 +3,13 @@ package shop.com.shareChat.dto.mypage;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import shop.com.shareChat.domain.mypage.Mypage;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@Getter
-public class MypageSaveResDto {
-
-    @NotEmpty
-    Long id;
+@RequiredArgsConstructor
+@Setter
+public class MypageUpdateReqDto {
 
     @NotEmpty
     @Size(min = 1, max = 20)
@@ -27,12 +26,11 @@ public class MypageSaveResDto {
     @Size(min = 1, max = 1000)
     private String intro;
 
-
-    public MypageSaveResDto(Mypage mypage) {
-        this.id = mypage.getId();
-        this.title = mypage.getTitle();
-        this.career = mypage.getCareer();
-        this.job = mypage.getJob();
-        this.intro = mypage.getIntro();
+    @Builder
+    public MypageUpdateReqDto(String title, int career, String job, String intro) {
+        this.title = title;
+        this.career = career;
+        this.job = job;
+        this.intro = intro;
     }
 }

@@ -22,7 +22,7 @@ public class LoginCheckAspect {
     private final HttpSession httpSession;
 
     // CheckLogin 어노테이션이 붙은 메소드가 실행하기 전 해당 로직을 실행
-    @Before("@annotation(shop.com.shareChat.aop.annotation.LoginCheck)")
+    @Before("@annotation(shop.com.shareChat.aop.annotation.LoginCheck ) && !!within(shop.com.shareChat.test..*))")
     public void checkLogin() throws HttpClientErrorException {
 
         SessionUser user = (SessionUser) httpSession.getAttribute("user");

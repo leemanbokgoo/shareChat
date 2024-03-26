@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import shop.com.shareChat.domain.user.User;
+import shop.com.shareChat.dto.mypage.MypageSaveReqDto;
+import shop.com.shareChat.dto.mypage.MypageUpdateReqDto;
 
 import java.time.LocalDateTime;
 
@@ -59,5 +61,15 @@ public class Mypage {
         this.user = user;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
+    }
+
+    public Mypage update(MypageUpdateReqDto reqDto){
+        this.title = title;
+        this.career = career;
+        this.job = job;
+        this.intro = intro;
+        this.updatedAt = LocalDateTime.now();
+
+        return this;
     }
 }

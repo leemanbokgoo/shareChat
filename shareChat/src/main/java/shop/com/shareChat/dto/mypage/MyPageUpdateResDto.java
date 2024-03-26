@@ -7,8 +7,7 @@ import lombok.Getter;
 import shop.com.shareChat.domain.mypage.Mypage;
 
 @Getter
-public class MypageSaveResDto {
-
+public class MyPageUpdateResDto {
     @NotEmpty
     Long id;
 
@@ -27,8 +26,7 @@ public class MypageSaveResDto {
     @Size(min = 1, max = 1000)
     private String intro;
 
-
-    public MypageSaveResDto(Mypage mypage) {
+    public MyPageUpdateResDto(Mypage mypage) {
         this.id = mypage.getId();
         this.title = mypage.getTitle();
         this.career = mypage.getCareer();

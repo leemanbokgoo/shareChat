@@ -11,8 +11,10 @@ import shop.com.shareChat.domain.mypage.Mypage;
 import shop.com.shareChat.domain.mypage.MypageRepository;
 import shop.com.shareChat.domain.user.User;
 import shop.com.shareChat.domain.user.UserRepository;
+import shop.com.shareChat.dto.mypage.MyPageUpdateResDto;
 import shop.com.shareChat.dto.mypage.MypageSaveReqDto;
 import shop.com.shareChat.dto.mypage.MypageSaveResDto;
+import shop.com.shareChat.dto.mypage.MypageUpdateReqDto;
 import shop.com.shareChat.dummy.DummyObject;
 import shop.com.shareChat.ex.CustomApiException;
 
@@ -43,7 +45,6 @@ class MypageServiceTest extends DummyObject {
         int career = 3;
         String intro = "안녕하세요";
 
-        //stub
         MypageSaveReqDto reqDto = MypageSaveReqDto.builder()
                 .title(title)
                 .job(job)
@@ -55,8 +56,9 @@ class MypageServiceTest extends DummyObject {
         Mypage mypage = newMockMypage(1L, title, job);
         when(userRepository.findByUsername(any())).thenReturn(Optional.ofNullable(user));
         when(mypageRepository.save(any())).thenReturn(mypage);
+
         //when
-        MypageSaveResDto saveResDto = mypageService.seveMypage(reqDto, "test@naver.com");
+        MypageSaveResDto saveResDto = mypageService.seve(reqDto, "test@naver.com");
         Assertions.assertThat(saveResDto.getTitle()).isEqualTo(title);
         Assertions.assertThat(saveResDto.getJob()).isEqualTo(job);
         Assertions.assertThat(saveResDto.getIntro()).isEqualTo(intro);
@@ -74,7 +76,6 @@ class MypageServiceTest extends DummyObject {
         int career = 3;
         String intro = "안녕하세요";
 
-        //stub
         MypageSaveReqDto reqDto = MypageSaveReqDto.builder()
                 .title(title)
                 .job(job)
@@ -82,10 +83,63 @@ class MypageServiceTest extends DummyObject {
                 .intro(intro)
                 .build();
 
-        //stub3
         Mypage mypage = newMockMypage(1L, title, job);
         when(userRepository.findByUsername(any())).thenReturn(Optional.ofNullable(user));
         //when
-        org.junit.jupiter.api.Assertions.assertThrows(CustomApiException.class, ()-> mypageService.seveMypage(reqDto, "test@naver.com"));
+        org.junit.jupiter.api.Assertions.assertThrows(CustomApiException.class, ()-> mypageService.seve(reqDto, "test@naver.com"));
     }
+
+    @DisplayName("reqDto와 user가 있다면 마이페이지 수정은 성공한다.")
+    @Test
+    void 마이페이지_수정_성공_테스트코드() {
+
+        //given
+        String title = "test입니다.";
+        String job = "백엔드개발자";
+        int career = 3;
+        String intro = "안녕하세요";
+
+        MypageUpdateReqDto reqDto = new MypageUpdateReqDto();
+        reqDto.setCareer(career);
+        reqDto.setJob(job);
+        reqDto.setTitle(title);
+        reqDto.setIntro(intro);
+
+        //stub
+        Mypage mypage = newMockMypage(1L, title, job);
+        when(mypageRepository.findById(any())).thenReturn(Optional.ofNullable(mypage));
+
+        //when
+        MyPageUpdateResDto resDto= mypageService.update(reqDto, 1L);
+
+        //then
+        Assertions.assertThat(resDto.getTitle()).isEqualTo(title);
+        Assertions.assertThat(resDto.getIntro()).isEqualTo(intro);
+        Assertions.assertThat(resDto.getJob()).isEqualTo(job);
+        Assertions.assertThat(resDto.getCareer()).isEqualTo(career);
+    }
+
+    @Test
+    void 마이페이지_수정_실패_테스트코드() {
+
+        //given
+        String title = "test입니다.";
+        String job = "백엔드개발자";
+        int career = 3;
+        String intro = "안녕하세요";
+        MypageUpdateReqDto reqDto = new MypageUpdateReqDto();
+        reqDto.setCareer(career);
+        reqDto.setJob(job);
+        reqDto.setTitle(title);
+        reqDto.setIntro(intro);
+
+        Mypage mypage = null;
+        when(mypageRepository.findById(any())).thenReturn(Optional.ofNullable(mypage));
+
+        //when
+
+        org.junit.jupiter.api.Assertions.assertThrows(CustomApiException.class, ()->mypageService.update(reqDto, 1L));
+
+    }
+
 }

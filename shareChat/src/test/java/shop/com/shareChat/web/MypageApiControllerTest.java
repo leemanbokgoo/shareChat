@@ -8,6 +8,7 @@ import org.mockito.MockitoSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -15,13 +16,19 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
+import shop.com.shareChat.confing.auth.LoginUserArgumentResolver;
 import shop.com.shareChat.confing.auth.dto.SessionUser;
 import shop.com.shareChat.domain.user.UserRepository;
 import shop.com.shareChat.dto.mypage.MypageSaveReqDto;
+import shop.com.shareChat.dto.mypage.MypageSaveResDto;
 import shop.com.shareChat.dto.user.JoinReqDto;
 import shop.com.shareChat.dummy.DummyObject;
+import shop.com.shareChat.service.MypageService;
 
+import static javax.management.Query.eq;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @Transactional
 @AutoConfigureMockMvc
@@ -40,15 +47,24 @@ class MypageApiControllerTest extends DummyObject {
     @Autowired
     EntityManager em;// 영속성 초기화
 
+    @MockBean
+    MypageService mypageService;
+
+    @MockBean
+    LoginUserArgumentResolver loginUserArgumentResolver;
+
     @BeforeEach
-    public void set_up(){
+    public void set_up() throws Exception {
         userRepository.save(newUser("test"));
+        doReturn(true).when(loginUserArgumentResolver).resolveArgument(any(), any(), any(), any());
         em.clear();
     }
 
+    MockHttpSession mockHttpSession;
+
     @Test
     @WithMockUser(username = "test")
-    public void 회원가입_성공_테스트() throws Exception {
+    public void 마이페이지_등록_테스트() throws Exception {
         // given
         String title = "test";
         String job = "백엔드개발자";
@@ -63,18 +79,20 @@ class MypageApiControllerTest extends DummyObject {
                 .build();
 
         String requestBody = om.writeValueAsString(joinReqDto);
-        MockHttpSession session  = new MockHttpSession();
+        mockHttpSession = new MockHttpSession();
 
         // 세션에 필요한 속성 설정
-        session.setAttribute("user", new SessionUser(newUser("test")));
+        mockHttpSession.setAttribute("user", new SessionUser(newUser("test")));
 
+        //when
         mvc
-                .perform(MockMvcRequestBuilders.post("/api/m/save")
-                        .session(session)
+                .perform(MockMvcRequestBuilders.post("/api/m/")
+                        .session(mockHttpSession)
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(MockMvcResultMatchers.status().isCreated());
+
     }
 
 }

@@ -38,6 +38,9 @@ dependencies {
 	//oauth2
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
+	// redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	// spring에서 redis를 session storage로 사용하기 위한 의존성
 	implementation 'org.springframework.session:spring-session-data-redis'
 
 }
