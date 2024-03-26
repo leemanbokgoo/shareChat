@@ -17,8 +17,6 @@ public class MypageSaveReqDto {
     @Size(min = 1, max = 20)
     private String title;
 
-    @NotEmpty
-    @Pattern(regexp = "^[0-9]{1,2}$")
     private int career;
 
     @Pattern(regexp = "^[a-zA-Z가-힣0-9]{1,20}$")

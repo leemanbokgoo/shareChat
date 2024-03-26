@@ -1,4 +1,4 @@
-package shop.com.shareChat.confing.auth;
+package shop.com.shareChat.confing;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import shop.com.shareChat.confing.auth.CustomOAuth2UserService;
 import shop.com.shareChat.domain.user.Role;
 
 @Configuration

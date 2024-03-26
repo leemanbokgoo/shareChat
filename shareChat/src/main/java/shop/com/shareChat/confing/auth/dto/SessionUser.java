@@ -1,11 +1,13 @@
 package shop.com.shareChat.confing.auth.dto;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import shop.com.shareChat.domain.user.Role;
 import shop.com.shareChat.domain.user.User;
 
 import java.io.Serializable;
 
+@RequiredArgsConstructor
 @Getter
 public class SessionUser implements Serializable {
     private String name;
@@ -18,5 +20,10 @@ public class SessionUser implements Serializable {
         this.name = user.getNickname();
         this.username = user.getUsername();
         this.role = user.getRole();
+    }
+
+    public SessionUser(SessionUser user){
+        this.name = user.getName();
+        this.username = user.getUsername();
     }
 }

@@ -1,5 +1,6 @@
 package shop.com.shareChat.confing.auth;
 
+
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -10,12 +11,16 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import shop.com.shareChat.confing.auth.dto.SessionUser;
 
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final HttpSession httpSession;
 
+    /**
+     * 1. @LoginUser이 붙어있는지
+     * 2. 파라미터의 SessionUser.class인지 확인
+     */
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         boolean isLoginUserAnnotation = parameter.getParameterAnnotation(LoginUser.class) != null;
@@ -23,8 +28,11 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         return isLoginUserAnnotation && isUserClass;
     }
 
-    public Object resolveArgument  (MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        // 세션에서 유저 정보 객체 받아옴.
-        return httpSession.getAttribute("user");
+    @Override
+    public Object resolveArgument(MethodParameter parameter,
+                                  ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest,
+                                  WebDataBinderFactory binderFactory) throws Exception {
+        return httpSession.getAttribute("user"); // 세션에서 유저 객체 정보 가져옴
     }
 }
