@@ -35,24 +35,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 
-	// lombok
-	annotationProcessor('org.projectlombok:lombok')
-	testAnnotationProcessor('org.projectlombok:lombok')
-
 	//oauth2
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-
-	// db
-	implementation 'org.mariadb.jdbc:mariadb-java-client'
-	testImplementation('org.springframework.boot:spring-boot-starter-test')
-	testImplementation("org.springframework.security:spring-security-test")
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	implementation 'org.springframework.session:spring-session-data-redis'
-
-	// aop
-	implementation 'org.springframework.boot:spring-boot-starter-aop'
 
 }
 

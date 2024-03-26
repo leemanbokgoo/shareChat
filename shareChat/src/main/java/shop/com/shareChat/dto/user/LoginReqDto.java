@@ -11,12 +11,12 @@ import shop.com.shareChat.domain.user.User;
 public class LoginReqDto{
     @NotEmpty
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
-    private String email;
+    private String username;
     @NotEmpty
     private String password;
 
     public LoginReqDto(User user) {
-        this.email = user.getEmail();
+        this.username = user.getUsername();
         this.password = user.getPasswrod();
     }
 }

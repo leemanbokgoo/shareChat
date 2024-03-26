@@ -1,4 +1,4 @@
-package shop.com.shareChat.config.auth.dto;
+package shop.com.shareChat.confing.auth.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -15,18 +15,19 @@ public class OAuthAttributes {
     private String email;
     // checkpoint 임의의 비밀번호
     private String password;
+    private String username;
     private String nickname;
     private GrantedAuthority authority;
     // 나중에 이미지 추가
 //    private String picture;
 
     @Builder
-    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String nickname,String password, String email ) {
+    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String username,String password, String nickname ) {
         this.attributes = attributes;
         this.password = password;
         this.nameAttributeKey = nameAttributeKey;
         this.nickname = nickname;
-        this.email = email;
+        this.username = username;
     }
 
     // OAuth2User에서 반환하는 사용자 정보는 Map이기 때문에 값 하나하나를 변환해야 한다.
@@ -40,9 +41,9 @@ public class OAuthAttributes {
     // google login OAuth
     private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
         return OAuthAttributes.builder()
-                .nickname((String) attributes.get("name"))
+                .username((String) attributes.get("email"))
                 .password((String) attributes.get("email"))
-                .email((String) attributes.get("email"))
+                .nickname((String) attributes.get("name"))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
@@ -53,8 +54,9 @@ public class OAuthAttributes {
     private static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
         return OAuthAttributes.builder()
-                .nickname((String) response.get("name"))
-                .email((String) response.get("email"))
+                .username((String) attributes.get("email"))
+                .password((String) attributes.get("email"))
+                .nickname((String) attributes.get("name"))
                 .attributes(response)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
@@ -65,7 +67,7 @@ public class OAuthAttributes {
         return User.builder()
                 .nickname(nickname)
                 .passwrod(password)
-                .email(email)
+                .username(username)
                 .role(Role.USER)
                 .build();
     }

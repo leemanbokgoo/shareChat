@@ -53,7 +53,7 @@ class MypageServiceTest extends DummyObject {
 
         //stub3
         Mypage mypage = newMockMypage(1L, title, job);
-        when(userRepository.findByEmail(any())).thenReturn(Optional.ofNullable(user));
+        when(userRepository.findByUsername(any())).thenReturn(Optional.ofNullable(user));
         when(mypageRepository.save(any())).thenReturn(mypage);
         //when
         MypageSaveResDto saveResDto = mypageService.seveMypage(reqDto, "test@naver.com");
@@ -84,7 +84,7 @@ class MypageServiceTest extends DummyObject {
 
         //stub3
         Mypage mypage = newMockMypage(1L, title, job);
-        when(userRepository.findByEmail(any())).thenReturn(Optional.ofNullable(user));
+        when(userRepository.findByUsername(any())).thenReturn(Optional.ofNullable(user));
         //when
         org.junit.jupiter.api.Assertions.assertThrows(CustomApiException.class, ()-> mypageService.seveMypage(reqDto, "test@naver.com"));
     }

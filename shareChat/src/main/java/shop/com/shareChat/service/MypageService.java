@@ -23,7 +23,7 @@ public class MypageService {
     // 마이페이지 등록
     public MypageSaveResDto seveMypage(MypageSaveReqDto mypageSaveReqDto, String email){
 
-        Optional<User> userOP = userRepository.findByEmail(email);
+        Optional<User> userOP = userRepository.findByUsername(email);
 
         if ( userOP.isEmpty()) {
             throw new CustomApiException(ErrorCode.USER_NOT_FOUND);

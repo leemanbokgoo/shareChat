@@ -25,7 +25,7 @@ public class LoginCheckAspect {
     public void checkLogin() throws HttpClientErrorException {
 
         User user = (User) httpSession.getAttribute("user");
-        Optional<User> userOP = userRepository.findByEmail(user.getEmail());
+        Optional<User> userOP = userRepository.findByUsername(user.getUsername());
         // 사용자가 없는 경우 에러 발생
         if (userOP.isEmpty()) {
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND);

@@ -15,6 +15,7 @@ import shop.com.shareChat.dto.user.JoinReqDto;
 import shop.com.shareChat.dto.user.JoinResDto;
 import shop.com.shareChat.dummy.DummyObject;
 import shop.com.shareChat.service.serviceImpl.UserServiceImpl;
+
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -37,16 +38,16 @@ class UserServiceTest extends DummyObject {
         // given
         Long id = 1L;
         String nickname ="test";
-        String email= "test@naver.com";
+        String username= "test@naver.com";
         String password = "1234";
         JoinReqDto joinReqDto = JoinReqDto.builder()
                 .nickname(nickname)
-                .email(email)
+                .username(username)
                 .password(password)
                 .build();
 
         //  Optional 객체 return
-        when(userRepository.findByEmail(any())).thenReturn(Optional.empty());
+        when(userRepository.findByUsername(any())).thenReturn(Optional.empty());
         User testUser = newMockUser(id, nickname);
         when(userRepository.save(any())).thenReturn(testUser);
 
@@ -56,7 +57,7 @@ class UserServiceTest extends DummyObject {
         // then
         Assertions.assertThat(joinResponseDto.getId()).isEqualTo(id);
         Assertions.assertThat(joinResponseDto.getNickname()).isEqualTo(nickname);
-        Assertions.assertThat(joinResponseDto.getEmail()).isEqualTo(email);
+        Assertions.assertThat(joinResponseDto.getUsername()).isEqualTo(username);
     }
 
     @DisplayName("유저가 null 인 경우")
@@ -65,18 +66,18 @@ class UserServiceTest extends DummyObject {
 
         Long id = 1L;
         String nickname ="test";
-        String email= "test@naver.com";
+        String username= "test@naver.com";
         String password = "1234";
 
         // given
         JoinReqDto joinReqDto = JoinReqDto.builder()
                 .nickname(nickname)
-                .email(email)
+                .username(username)
                 .password(password)
                 .build();
 
         //  Optional 객체 return
-        when(userRepository.findByEmail(any())).thenReturn(Optional.empty());
+        when(userRepository.findByUsername(any())).thenReturn(Optional.empty());
 
         // stub3
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

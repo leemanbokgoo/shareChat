@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public JoinResDto join(JoinReqDto joinReqDto){
         // 동일 유저네임 존재 검사
-        Optional<User> userOP = userRepository.findByEmail(joinReqDto.getEmail());
+        Optional<User> userOP = userRepository.findByUsername(joinReqDto.getUsername());
 
         if ( userOP.isPresent()) {
             throw new CustomApiException(ErrorCode.USER_EXIST);

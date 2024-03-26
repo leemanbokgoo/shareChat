@@ -1,5 +1,4 @@
-package shop.com.shareChat.config.auth;
-
+package shop.com.shareChat.confing.auth;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +10,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import shop.com.shareChat.config.auth.dto.OAuthAttributes;
-import shop.com.shareChat.config.auth.dto.SessionUser;
+import shop.com.shareChat.confing.auth.dto.OAuthAttributes;
+import shop.com.shareChat.confing.auth.dto.SessionUser;
 import shop.com.shareChat.domain.user.User;
 import shop.com.shareChat.domain.user.UserRepository;
 
@@ -50,13 +49,11 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private User saveOrUpdate(OAuthAttributes attributes){
-        User user = userRepository.findByEmail(attributes.getEmail())
+        User user = userRepository.findByUsername(attributes.getUsername())
                 .map(entity -> entity.update(attributes.getNickname()))
                 .orElse(attributes.toEntity());
-        
+
         return userRepository.save(user);
     }
 
-    public static class LoginUserArgumentResolver {
-    }
 }

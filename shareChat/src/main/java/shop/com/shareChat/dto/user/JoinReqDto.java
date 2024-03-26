@@ -20,13 +20,13 @@ public class JoinReqDto{
 
     @NotEmpty
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
-    private String email;
+    private String username;
 
     @Builder
-    public JoinReqDto(String nickname, String password, String email) {
+    public JoinReqDto(String nickname, String password, String username) {
         this.nickname = nickname;
         this.password = password;
-        this.email = email;
+        this.username = username;
     }
 
     // 회원가입 및 패스워드 인코딩
@@ -34,7 +34,7 @@ public class JoinReqDto{
         return User.builder()
                 .nickname(nickname)
                 .passwrod(passwordEncoder.encode(password))
-                .email(email)
+                .username(username)
                 .role(Role.USER)
                 .build();
     }

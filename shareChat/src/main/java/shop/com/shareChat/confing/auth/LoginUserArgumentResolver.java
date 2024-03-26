@@ -1,4 +1,4 @@
-package shop.com.shareChat.config.auth;
+package shop.com.shareChat.confing.auth;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -8,21 +8,17 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import shop.com.shareChat.config.auth.dto.SessionUser;
-import shop.com.shareChat.domain.user.UserRepository;
+import shop.com.shareChat.confing.auth.dto.SessionUser;
 
 @RequiredArgsConstructor
 @Component
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final HttpSession httpSession;
-    private UserRepository userRepository;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        // Logincheck 이노테이션을 가지고있다면
         boolean isLoginUserAnnotation = parameter.getParameterAnnotation(LoginUser.class) != null;
-        // SessionUser 클래스라면
         boolean isUserClass = SessionUser.class.equals(parameter.getParameterType());
         return isLoginUserAnnotation && isUserClass;
     }

@@ -22,7 +22,7 @@ public class User {
     private Long id;
 
     @Column(nullable = false , length = 20)
-    private String email;
+    private String username;
 
     @Column(nullable = false , length = 60)
     private String passwrod;
@@ -46,11 +46,11 @@ public class User {
 
 
     @Builder
-    public User(Long id, String nickname, String passwrod, String email, Role role, int state, LocalDateTime updatedAt, LocalDateTime createdAt) {
+    public User(Long id, String nickname, String passwrod, String username, Role role, int state, LocalDateTime updatedAt, LocalDateTime createdAt) {
         this.id = id;
         this.nickname = nickname;
         this.passwrod = passwrod;
-        this.email = email;
+        this.username = username;
         this.state = state;
         this.role = role;
         this.updatedAt = updatedAt;

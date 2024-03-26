@@ -14,12 +14,12 @@ public class LoginResDto {
     private Long id;
     @NotEmpty
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
-    private String email;
+    private String username;
     private String createdAt;
 
     public LoginResDto(User user) {
         this.id = user.getId();
-        this.email = user.getEmail();
+        this.username = user.getUsername();
         this.createdAt = CustomDateUtil.toStrnigFormat(user.getCreatedAt());
     }
 }
