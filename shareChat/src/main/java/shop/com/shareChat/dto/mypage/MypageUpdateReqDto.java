@@ -4,10 +4,12 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @RequiredArgsConstructor
+@Getter
 @Setter
 public class MypageUpdateReqDto {
 
@@ -15,11 +17,10 @@ public class MypageUpdateReqDto {
     @Size(min = 1, max = 20)
     private String title;
 
-    @NotEmpty
-    @Pattern(regexp = "^[0-9]{1,2}$")
     private int career;
+    private int occupation;
 
-    @Pattern(regexp = "^[a-zA-Z가-힣0-9]{1,20}$")
+    @NotEmpty
     private String job;
 
     @NotEmpty
@@ -27,9 +28,10 @@ public class MypageUpdateReqDto {
     private String intro;
 
     @Builder
-    public MypageUpdateReqDto(String title, int career, String job, String intro) {
+    public MypageUpdateReqDto(String title, int career, int occupation, String job, String intro) {
         this.title = title;
         this.career = career;
+        this.occupation = occupation;
         this.job = job;
         this.intro = intro;
     }

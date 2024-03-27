@@ -10,6 +10,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import shop.com.shareChat.confing.auth.dto.SessionUser;
 import shop.com.shareChat.domain.user.User;
 import shop.com.shareChat.domain.user.UserRepository;
+import shop.com.shareChat.ex.CustomApiException;
+import shop.com.shareChat.ex.ErrorCode;
 
 import java.util.Optional;
 
@@ -29,7 +31,7 @@ public class LoginCheckAspect {
         Optional<User> userOP = userRepository.findByUsername(user.getUsername());
         // 사용자가 없는 경우 에러 발생
         if (userOP.isEmpty()) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+            throw new CustomApiException(ErrorCode.USER_NOT_FOUND);
         }
     }
 }

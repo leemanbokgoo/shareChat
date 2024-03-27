@@ -48,6 +48,7 @@ class MypageServiceTest extends DummyObject {
         MypageSaveReqDto reqDto = MypageSaveReqDto.builder()
                 .title(title)
                 .job(job)
+                .occupation(3)
                 .career(career)
                 .intro(intro)
                 .build();
@@ -110,7 +111,7 @@ class MypageServiceTest extends DummyObject {
         when(mypageRepository.findById(any())).thenReturn(Optional.ofNullable(mypage));
 
         //when
-        MyPageUpdateResDto resDto= mypageService.update(reqDto, 1L);
+        MyPageUpdateResDto resDto= mypageService.update(reqDto,  "test@naver.com");
 
         //then
         Assertions.assertThat(resDto.getTitle()).isEqualTo(title);
@@ -138,7 +139,7 @@ class MypageServiceTest extends DummyObject {
 
         //when
 
-        org.junit.jupiter.api.Assertions.assertThrows(CustomApiException.class, ()->mypageService.update(reqDto, 1L));
+        org.junit.jupiter.api.Assertions.assertThrows(CustomApiException.class, ()->mypageService.update(reqDto,  "test@naver.com"));
 
     }
 

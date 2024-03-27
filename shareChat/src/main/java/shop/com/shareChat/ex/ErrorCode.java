@@ -15,6 +15,7 @@ public enum ErrorCode {
     //404 NOT_FOUND 잘못된 리소스 접근
     USER_NOT_FOUND(404, "존재하지 않는 사용자 ID 입니다."),
     MYPAGE_NOT_FOUND(404, "존재하지 않는 마이페이지 입니다."),
+    SHARECHAT_NOT_FOUND(404, "존재하지 않는 쉐어챗 입니다."),
 
     // 권한 관련
     NOT_USER(401, "로그인을 해주세요."),

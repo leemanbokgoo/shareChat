@@ -1,4 +1,4 @@
-package shop.com.shareChat.domain.sharechat;
+package shop.com.shareChat.domain.userSharchat;
 
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -6,36 +6,32 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import shop.com.shareChat.domain.sharechat.Sharechat;
 import shop.com.shareChat.domain.user.User;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-
 @NoArgsConstructor
 @Getter
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "sharechat_sc")
+@Table(name = "userShareChat_sc")
 @Entity
-public class Sharechat {
+public class UserSharechat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false )
-    private LocalTime startTime;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shareChat_id")
+    private Sharechat sharechat;
 
-    @Column(nullable = false )
-    private LocalTime endTime;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private User user;
 
-    @Column(nullable = false )
-    private LocalDateTime date;
-
-    @Column(nullable = false, length = 1000)
-    private String content;
-
-    @Column(nullable = false)
-    private int state;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiverId")
+    private User receiver;
 
     @CreatedDate
     @Column(nullable = false)
@@ -46,13 +42,11 @@ public class Sharechat {
     private LocalDateTime createdAt;
 
     @Builder
-    public Sharechat(Long id, LocalTime startTime, LocalTime endTime, LocalDateTime date, String content, int state, LocalDateTime updatedAt, LocalDateTime createdAt) {
+    public UserSharechat(Long id, Sharechat sharechat, User user, User receiver, LocalDateTime updatedAt, LocalDateTime createdAt) {
         this.id = id;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.date = date;
-        this.content = content;
-        this.state = state;
+        this.sharechat = sharechat;
+        this.user = user;
+        this.receiver = receiver;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
     }

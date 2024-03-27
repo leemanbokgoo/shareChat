@@ -29,8 +29,11 @@ public class Mypage {
     @Column(nullable = false)
     private int career;
 
-    @Column(nullable = false , length = 20)
+    @Column(nullable = false )
     private String job;
+
+    @Column(nullable = false , length = 20)
+    private int occupation;
 
     @Column(nullable = false, length = 1000)
     private String intro;
@@ -51,11 +54,12 @@ public class Mypage {
     private LocalDateTime createdAt;
 
     @Builder
-    public Mypage(Long id, String title, int career, String job, String intro, boolean state, User user, LocalDateTime updatedAt, LocalDateTime createdAt) {
+    public Mypage(Long id, String title, int career, String job, int occupation, String intro, boolean state, User user, LocalDateTime updatedAt, LocalDateTime createdAt) {
         this.id = id;
         this.title = title;
         this.career = career;
         this.job = job;
+        this.occupation = occupation;
         this.intro = intro;
         this.state = state;
         this.user = user;
@@ -64,12 +68,12 @@ public class Mypage {
     }
 
     public Mypage update(MypageUpdateReqDto reqDto){
-        this.title = title;
-        this.career = career;
-        this.job = job;
-        this.intro = intro;
+        this.title = reqDto.getTitle();
+        this.occupation =  reqDto.getOccupation();
+        this.career = reqDto.getCareer();
+        this.job = reqDto.getJob();
+        this.intro = reqDto.getIntro();
         this.updatedAt = LocalDateTime.now();
-
         return this;
     }
 }

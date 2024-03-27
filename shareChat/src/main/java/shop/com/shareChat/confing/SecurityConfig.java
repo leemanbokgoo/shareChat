@@ -65,21 +65,10 @@ public class SecurityConfig  {
                                 .userService(this.customOAuth2UserService)
                                 )
                 )
-//                .exceptionHandling((exceptionConfig) ->
-//                        exceptionConfig
-//                                .authenticationEntryPoint(customAuthenticationEntryPoint)
-////                                .accessDeniedHandler(customAccessDeniedHandler)
-//                )
-        ;
 
+        ;
         return http.build();
     }
 
-//    public AccessDeniedHandler accessDeniedHandler() {
-//        CustomAccessDeniedHandler accessDeniedHandler = new CustomAccessDeniedHandler();
-//        accessDeniedHandler.setErrorURL("/auth/denied");
-//
-//        return accessDeniedHandler;
-//    }
 }
 

@@ -12,14 +12,14 @@ import shop.com.shareChat.domain.user.User;
 public class JoinReqDto{
     // 유효성 검사
     @NotEmpty
-    @Pattern(regexp = "^[a-zA-Z가-힣0-9]{1,10}$")
+    @Pattern(regexp = "^[a-zA-Z가-힣0-9]{1,10}$", message = "한글 및 숫자를 입력해주세요.")
     private String nickname;
 
     @NotEmpty
     private String password;
 
     @NotEmpty
-    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$" , message = "이메일을 입력해주세요.")
     private String username;
 
     @Builder

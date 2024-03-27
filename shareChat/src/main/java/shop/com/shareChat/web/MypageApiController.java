@@ -12,10 +12,7 @@ import shop.com.shareChat.confing.auth.LoginUser;
 import shop.com.shareChat.confing.auth.dto.SessionUser;
 import shop.com.shareChat.domain.user.User;
 import shop.com.shareChat.dto.HttpResponseDto;
-import shop.com.shareChat.dto.mypage.MyPageUpdateResDto;
-import shop.com.shareChat.dto.mypage.MypageSaveReqDto;
-import shop.com.shareChat.dto.mypage.MypageSaveResDto;
-import shop.com.shareChat.dto.mypage.MypageUpdateReqDto;
+import shop.com.shareChat.dto.mypage.*;
 import shop.com.shareChat.ex.CustomValidationException;
 import shop.com.shareChat.ex.ErrorCode;
 import shop.com.shareChat.service.MypageService;
@@ -38,13 +35,21 @@ public class MypageApiController {
     }
 
     // 수정
-    @PutMapping("/{mypageId}")
+    @PutMapping("/update")
     @LoginCheck
-    public ResponseEntity<?> update(@RequestBody @Valid MypageUpdateReqDto reqDto , BindingResult bindingResult, @PathVariable Long mypageId){
+    public ResponseEntity<?> update(@RequestBody @Valid MypageUpdateReqDto reqDto , BindingResult bindingResult,  @LoginUser SessionUser user){
         if (bindingResult.hasErrors()) {
             throw new CustomValidationException(ErrorCode.VALIDATION_ERROR, null);
         }
-        MyPageUpdateResDto resDto = mypageService.update(reqDto, mypageId);
+
+        MyPageUpdateResDto resDto = mypageService.update(reqDto, user.getUsername());
+        return new ResponseEntity<>(new HttpResponseDto<>(1, "마이페이지 수정 성공", resDto), HttpStatus.CREATED);
+
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getMypage(@PathVariable Long userId){
+        MypageResDto resDto = mypageService.getMypage(userId);
         return new ResponseEntity<>(new HttpResponseDto<>(1, "마이페이지 등록 성공", resDto), HttpStatus.CREATED);
 
     }

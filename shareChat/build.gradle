@@ -43,6 +43,18 @@ dependencies {
 	// spring에서 redis를 session storage로 사용하기 위한 의존성
 	implementation 'org.springframework.session:spring-session-data-redis'
 
+	// 암호화
+	implementation 'org.mindrot:jbcrypt:0.4'
+
+	// Querydsl
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+	//s3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
 }
 tasks.named('test') {
 	useJUnitPlatform()

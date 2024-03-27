@@ -19,18 +19,21 @@ public class MypageSaveReqDto {
 
     private int career;
 
-    @Pattern(regexp = "^[a-zA-Z가-힣0-9]{1,20}$")
+    @NotEmpty
     private String job;
+
+    private int occupation;
 
     @NotEmpty
     @Size(min = 1, max = 1000)
     private String intro;
 
     @Builder
-    public MypageSaveReqDto(String title, int career, String job, String intro) {
+    public MypageSaveReqDto(String title, int career, String job, int occupation, String intro) {
         this.title = title;
         this.career = career;
         this.job = job;
+        this.occupation = occupation;
         this.intro = intro;
     }
 
