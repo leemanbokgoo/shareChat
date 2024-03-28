@@ -21,4 +21,7 @@ public interface MypageService {
 
     // 마이페이지 조회
     MypageResDto getMypage(Long userId);
+
+    // 쉐어챗 설정 on/ off
+    Boolean shareChatOnOff(String username, boolean state);
 }

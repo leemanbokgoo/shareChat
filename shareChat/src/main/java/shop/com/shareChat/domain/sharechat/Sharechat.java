@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import shop.com.shareChat.domain.user.User;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -29,7 +30,7 @@ public class Sharechat {
     private LocalTime endTime;
 
     @Column(nullable = false )
-    private LocalDateTime date;
+    private LocalDate date;
 
     @Column(nullable = false, length = 1000)
     private String content;
@@ -46,7 +47,7 @@ public class Sharechat {
     private LocalDateTime createdAt;
 
     @Builder
-    public Sharechat(Long id, LocalTime startTime, LocalTime endTime, LocalDateTime date, String content, int state, LocalDateTime updatedAt, LocalDateTime createdAt) {
+    public Sharechat(Long id, LocalTime startTime, LocalTime endTime, LocalDate date, String content, int state, LocalDateTime updatedAt, LocalDateTime createdAt) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;

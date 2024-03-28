@@ -9,10 +9,11 @@ import shop.com.shareChat.domain.user.User;
 import shop.com.shareChat.dto.sharechat.ShareChaListResDto;
 import shop.com.shareChat.dto.sharechat.ShareChatMyListResDto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import static shop.com.shareChat.domain.sharechat.QSharechat.sharechat;
+import static shop.com.shareChat.domain.shartime.QSharetime.sharetime;
 import static shop.com.shareChat.domain.userSharchat.QUserSharechat.userSharechat;
 import static shop.com.shareChat.domain.mypage.QMypage.mypage;
 
@@ -22,7 +23,7 @@ public class ShareChatCustomRepositoryImpl implements ShareChatCustomRepository{
     private final JPAQueryFactory query;
 
     @Override
-    public List<ShareChaListResDto> getTimeByDayforWeek(Long userId, LocalDateTime date, int state) {
+    public List<ShareChaListResDto> getTimeByDayforWeek(Long userId, LocalDate date, int state) {
         BooleanBuilder builder = getFilter( date, state);
         return query.select(
                         Projections.constructor(
@@ -55,10 +56,27 @@ public class ShareChatCustomRepositoryImpl implements ShareChatCustomRepository{
                 .fetch();
     }
 
-    public BooleanBuilder getFilter( LocalDateTime date, int state){
+    @Override
+    public List<ShareChaListResDto> getDayOfShareCht(User user, LocalDate date) {
+        System.out.println(date);
+        System.out.println(user.getId());
+        return  query.select(
+                        Projections.constructor(
+                                ShareChaListResDto.class,
+                                sharechat.startTime,
+                                sharechat.endTime,
+                                sharechat.state.as("shareChatTime")
+                        )
+                ).from(userSharechat)
+                .leftJoin(userSharechat.sharechat, sharechat)
+                .where(userSharechat.receiver.eq(user), sharechat.date.eq(date) , sharechat.state.eq(2).or(sharechat.state.eq(1)))
+                .fetch();
+    }
+
+    public BooleanBuilder getFilter(LocalDate date, int state){
 
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and( QSharechat.sharechat.date.eq(date));
+        builder.and( sharechat.date.eq(date));
 
         if ( state != 0 && state !=2 ) { // 예약 취소, 예약 대기
             builder.and( QSharechat.sharechat.state.eq( state));

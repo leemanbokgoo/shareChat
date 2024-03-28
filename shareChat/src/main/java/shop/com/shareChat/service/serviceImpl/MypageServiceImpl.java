@@ -59,4 +59,22 @@ public class MypageServiceImpl implements MypageService {
                 .orElseThrow(() -> new CustomApiException(ErrorCode.MYPAGE_NOT_FOUND));
         return mypagePs;
     }
+
+    // 마이페이지 쉐어챗 설정 onoff
+    @Override
+    public Boolean shareChatOnOff(String username, boolean state) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.USER_NOT_FOUND));
+
+        Mypage mypagePs =  Optional.ofNullable(mypageRepository.findByUser(user))
+                .orElseThrow(() -> new CustomApiException(ErrorCode.MYPAGE_NOT_FOUND));
+
+        Mypage mypage= mypagePs.updateState(state);
+
+        if ( mypage != null ){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

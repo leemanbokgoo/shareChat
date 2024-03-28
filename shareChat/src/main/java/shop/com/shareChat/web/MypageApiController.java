@@ -2,6 +2,7 @@ package shop.com.shareChat.web;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,10 +48,20 @@ public class MypageApiController {
 
     }
 
+    // 마이페이지 단일 조회
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getMypage(@PathVariable Long userId){
         MypageResDto resDto = mypageService.getMypage(userId);
         return new ResponseEntity<>(new HttpResponseDto<>(1, "마이페이지 등록 성공", resDto), HttpStatus.CREATED);
 
     }
+
+    // 마이페이지 쉐어챗 설정 on /off
+    @PutMapping("/sc/state")
+    public ResponseEntity<?> shareChatonoff(@PathVariable boolean state, @LoginUser SessionUser user){
+        Boolean result = mypageService.shareChatOnOff(user.getUsername(), state);
+        return new ResponseEntity<>(new HttpResponseDto<>(1, "마이페이지 쉐어챗 on/off 성공", result), HttpStatus.CREATED);
+    }
+
+
 }

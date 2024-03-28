@@ -1,8 +1,10 @@
 package shop.com.shareChat.dto.sharechat;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -11,14 +13,13 @@ import java.time.LocalTime;
 public class ShareChaListResDto {
     private LocalTime startTime;
     private LocalTime endTime;
-    private LocalDateTime date;
-    private String content;
+    private int shareChatTime;
 
     @Builder
-    public ShareChaListResDto(LocalTime startTime, LocalTime endTime, LocalDateTime date, String content) {
+    @QueryProjection
+    public ShareChaListResDto(LocalTime startTime, LocalTime endTime, int shareChatTime) {
         this.startTime = startTime;
         this.endTime = endTime;
-        this.date = date;
-        this.content = content;
+        this.shareChatTime = shareChatTime;
     }
 }

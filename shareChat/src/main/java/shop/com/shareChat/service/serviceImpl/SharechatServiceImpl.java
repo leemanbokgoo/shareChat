@@ -6,13 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.com.shareChat.domain.sharechat.ShareChatRepository;
 import shop.com.shareChat.domain.sharechat.Sharechat;
 import shop.com.shareChat.domain.shartime.ShareTimeRepository;
+import shop.com.shareChat.domain.user.DayOfWeek;
 import shop.com.shareChat.domain.user.User;
 import shop.com.shareChat.domain.user.UserRepository;
+import shop.com.shareChat.domain.userSharchat.UserSharechat;
 import shop.com.shareChat.domain.userSharchat.UserSharechatRepository;
-import shop.com.shareChat.dto.sharechat.ShareChaListResDto;
-import shop.com.shareChat.dto.sharechat.ShareChatMyListResDto;
-import shop.com.shareChat.dto.sharechat.ShareChatRepDto;
-import shop.com.shareChat.dto.sharechat.ShareChatResDto;
+import shop.com.shareChat.dto.sharechat.*;
 import shop.com.shareChat.dto.usersharechat.UserShareChatReqDto;
 import shop.com.shareChat.ex.CustomApiException;
 import shop.com.shareChat.ex.ErrorCode;
@@ -59,30 +58,34 @@ public class SharechatServiceImpl implements SharechatService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Map<String, String>> getList(Long userId, LocalDateTime date, int state) {
+    public List<Map<String, String>> getList(Long userId, DayOfWeek day, LocalDate date) {
 
-        List<ShareChaListResDto> allShareChatTime = shareChatRepository.getTimeByDayforWeek(userId,date, state);
-        if (allShareChatTime.size() != 0 ){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.USER_NOT_FOUND));
 
-            int timePerSession = shareTimeRepository.findShareChatTimeById(userId);
+        // 해당 요일의 쉐어챗 날짜 설정
+        List<ShareChaListResDto> allShareChatTime = shareTimeRepository.getTimeByDayforWeek(user, day);
 
-            // 1회당 시간 넘겨줌
+        if ( !allShareChatTime.isEmpty() ){
+
+            // 쉐어챗 1회당 시간
+            int timePerSession = allShareChatTime.get(0).getShareChatTime();
+
             // 해당 멘토링 날짜의 신청된 멘토링 시간 조회
-            List<ShareChaListResDto> getShareChatList = shareChatRepository.getTimeByDayforWeek( userId, date, state );
-
-            // 해당 시간대를 설정된 시간별로 쪼갬 ( 10-14시 1시간씩이라면 10:00~11:00, 11:00~12:00, 12:00~14:00 )
-            List<Map<String, String>> allShareChatTimeList = getTimeList(allShareChatTime,timePerSession);
-            List<Map<String, String>> ShareChatList = getTimeList(getShareChatList,timePerSession );
+            List<ShareChaListResDto> getDayOfShareChatList = shareChatRepository.getDayOfShareCht( user, date );
+            // 해당 시간대를 시간별로 쪼갬 및 타입변환
+            List<Map<String, String>> allShareTime = splitTime(allShareChatTime ,timePerSession);
+            List<Map<String, String>> shareChat = splitTime(getDayOfShareChatList ,timePerSession);
 
             // set 으로 변환
-            Set<Map<String, String>> setAllShareChat = new LinkedHashSet<>(ShareChatList);
-            Set<Map<String, String>> setShareChat = new LinkedHashSet<>(allShareChatTimeList);
+            Set<Map<String, String>> setAllShareTime  = new LinkedHashSet<>(allShareTime);
+            Set<Map<String, String>> setShareChat = new LinkedHashSet<>(shareChat);
 
             // 중복 값 삭제
-            setAllShareChat.removeAll(setShareChat);
+            setAllShareTime.removeAll(setShareChat);
 
             // 중복값 삭제 = 신청되지않은 멘토링만 남았다는 뜻.
-            for (Map<String, String> map : setAllShareChat) {
+            for (Map<String, String> map : setAllShareTime) {
                 map.put("state", "1");
             }
 
@@ -91,11 +94,10 @@ public class SharechatServiceImpl implements SharechatService {
                 map.put("state", "0");
             }
 
-            setAllShareChat.addAll(setShareChat);
-            List<Map<String, String>> list = new ArrayList<>(setAllShareChat);
+            setAllShareTime.addAll(setShareChat);
+            List<Map<String, String>> list = new ArrayList<>(setAllShareTime);
 
             return list;
-
         } else {
             return null;
         }
@@ -115,13 +117,16 @@ public class SharechatServiceImpl implements SharechatService {
         Sharechat sharechat = shareChatRepository.findById(shareChatId)
                 .orElseThrow(()-> new CustomApiException(ErrorCode.SHARECHAT_NOT_FOUND));
 
-        shareChatRepository.delete(sharechat);
+        UserSharechat userSharechat = userSharechatRepository.findBySharechat(sharechat)
+                .orElseThrow(()-> new CustomApiException(ErrorCode.SHARECHAT_NOT_FOUND));
 
-        return false;
+        userSharechatRepository.delete(userSharechat);
+        shareChatRepository.delete(sharechat);
+        return true;
     }
 
     // 쉐어챗 설정 시간 -> 쉐어챗 시간대로 나누는 함수
-    public List<Map<String, String>> getTimeList(List<ShareChaListResDto> responses, int shareChatTime ){
+    public List<Map<String, String>> splitTime(List<ShareChaListResDto> responses, int mentoringTime ){
 
         List<Map<String,String>> mentorTime = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -133,12 +138,10 @@ public class SharechatServiceImpl implements SharechatService {
 
             // starTime이 endTim보다 이전인 동안 while
             while (startTime.isBefore(LocalDateTime.of(LocalDate.now(), item.getEndTime()))) {
-
-                LocalDateTime endTime = startTime.plusMinutes(shareChatTime);
+                LocalDateTime endTime = startTime.plusMinutes(mentoringTime);
                 Map<String, String> map = new HashMap<>();
                 map.put("startTime", startTime.format(formatter));
                 map.put("endTime", endTime.format(formatter));
-
                 // 1회당 시간만큼 더하기 //초기화
                 startTime = endTime;
                 mentorTime.add(map);
@@ -148,11 +151,13 @@ public class SharechatServiceImpl implements SharechatService {
             Map<String, String> map = new HashMap<>();
 
             LocalTime endTime = item.getEndTime();
-            LocalTime endStatTime = endTime.minusMinutes(shareChatTime);
+            LocalTime endStatTime = endTime.minusMinutes(mentoringTime);
 
             map.put("startTime", endStatTime.format(formatter));
             map.put("endTime", endTime.format(formatter));
+
             mentorTime.add(map);
+
         }
 
         return mentorTime;

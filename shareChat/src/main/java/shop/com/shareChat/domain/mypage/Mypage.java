@@ -76,4 +76,9 @@ public class Mypage {
         this.updatedAt = LocalDateTime.now();
         return this;
     }
+
+    public Mypage updateState(boolean state){
+        this.state = state;
+        return this;
+    }
 }
