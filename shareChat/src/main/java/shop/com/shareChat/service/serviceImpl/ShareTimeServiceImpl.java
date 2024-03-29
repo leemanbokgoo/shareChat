@@ -25,8 +25,8 @@ public class ShareTimeServiceImpl implements ShareTimeService {
     @Transactional
     @Override
     public ShareTimeResDto save(ShareTimeReqDto reqDto, String username) {
-        User user = (userRepository.findByUsername(username)
-                .orElseThrow(() -> new CustomApiException(ErrorCode.USER_NOT_FOUND)));
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.USER_NOT_FOUND));
         Sharetime sharetimePS = shareTimeRepository.save(reqDto.toEntity(user));
 
         return new ShareTimeResDto(sharetimePS);
