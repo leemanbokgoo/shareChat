@@ -16,7 +16,7 @@ import java.util.Optional;
 
 public interface MypageService {
 
-    MypageSaveResDto seve(MypageSaveReqDto mypageSaveReqDto, String email);
+    MypageSaveResDto save(MypageSaveReqDto mypageSaveReqDto, String email);
     MyPageUpdateResDto update(MypageUpdateReqDto resDto, String username);
 
     // 마이페이지 조회

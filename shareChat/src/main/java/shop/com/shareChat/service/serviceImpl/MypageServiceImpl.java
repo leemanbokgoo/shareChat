@@ -21,7 +21,7 @@ public class MypageServiceImpl implements MypageService {
 
     // 마이페이지 등록
     @Transactional
-    public MypageSaveResDto seve(MypageSaveReqDto mypageSaveReqDto, String email){
+    public MypageSaveResDto save(MypageSaveReqDto mypageSaveReqDto, String email){
 
         Optional<User> userOP = userRepository.findByUsername(email);
 

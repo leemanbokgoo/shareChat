@@ -30,6 +30,9 @@ public class User {
     @Column(nullable = false , length = 20)
     private String nickname;
 
+    @Column
+    private String profileImg;
+
     @Column(nullable = false)
     private int state;
 
@@ -59,6 +62,12 @@ public class User {
 
     public User update( String nickname ) {
         this.nickname = nickname;
+        return this;
+    }
+
+    public User updateProfileImg( String profileImg){
+        this.profileImg = profileImg;
+
         return this;
     }
 

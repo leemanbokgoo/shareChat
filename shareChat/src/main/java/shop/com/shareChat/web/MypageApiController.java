@@ -31,7 +31,7 @@ public class MypageApiController {
         if (bindingResult.hasErrors()) {
             throw new CustomValidationException(ErrorCode.VALIDATION_ERROR, null);
         }
-        MypageSaveResDto joinRespDto = mypageService.seve(saveReqDto, sessionUser.getUsername());
+        MypageSaveResDto joinRespDto = mypageService.save(saveReqDto, sessionUser.getUsername());
         return new ResponseEntity<>(new HttpResponseDto<>(1, "마이페이지 등록 성공", joinRespDto), HttpStatus.CREATED);
     }
 

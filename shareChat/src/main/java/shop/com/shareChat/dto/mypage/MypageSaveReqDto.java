@@ -6,10 +6,12 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import shop.com.shareChat.domain.mypage.Mypage;
 import shop.com.shareChat.domain.user.User;
 
 @RequiredArgsConstructor
+@Setter
 @Getter
 public class MypageSaveReqDto {
 
