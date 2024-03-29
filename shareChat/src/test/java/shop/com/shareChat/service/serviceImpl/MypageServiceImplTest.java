@@ -39,12 +39,12 @@ class MypageServiceImplTest extends DummyObject {
     private MypageRepository mypageRepository;
 
     private User user;
+    private Mypage mypage;
 
     @BeforeEach
     void set_up(){
         //gvein
         user = newUser("test");
-        userRepository.save(user);
     }
 
     @AfterEach
@@ -116,6 +116,87 @@ class MypageServiceImplTest extends DummyObject {
         //then
         assertThrows(CustomApiException.class, ()-> mypageService.update(any(), mockUser.getUsername()));
         verify(mypageRepository, times(0)).save(any());
+    }
+
+    @DisplayName("존재하는 게시물의 유저 아이디를 통해 게시물을 조회")
+    @Test
+    public void getMypage(){
+
+        // given
+        mypage = newMockMypage(1L, "test", "백엔드개발자");
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        MypageResDto resDto = new MypageResDto(mypage.getId(),mypage.getJob(), mypage.getTitle(), mypage.getIntro(), mypage.getOccupation());
+        when(mypageRepository.getMypage(user)).thenReturn(resDto);
+
+        // when
+        MypageResDto targetMypage = mypageService.getMypage(user.getId());
+
+        // then
+        assertEquals(targetMypage, resDto);
+        verify(mypageRepository).getMypage(user);
+    }
+
+
+    @DisplayName("존재하지않는 게시물의 유저 아이디를 통해 게시물을 조회")
+    @Test
+    public void getMypageWithoutMypage(){
+        // given
+        when(userRepository.findById(user.getId())).thenReturn(Optional.ofNullable(user));
+        when(mypageRepository.getMypage(user)).thenReturn(null);
+        // when
+        assertThrows(CustomApiException.class, ()-> mypageService.getMypage(user.getId()));
+
+        // then
+        verify(userRepository).findById(user.getId());
+        verify(mypageRepository).getMypage(user);
+    }
+
+    @DisplayName("존재하지않는 유저 아이디를 통해 게시물을 조회")
+    @Test
+    public void getMypageWithoutUser(){
+        // given
+        mypage = newMockMypage(1L, "test", "백엔드개발자");
+        when(userRepository.findById(user.getId())).thenReturn(Optional.empty());
+        // when
+        assertThrows(CustomApiException.class, ()-> mypageService.getMypage(user.getId()));
+
+        //then
+        verify(userRepository).findById(user.getId());
+    }
+
+    @DisplayName("쉐어챗의 상태값 변경시 유저가 없으면 CustomApiException을 던지며 실패.")
+    @Test
+    public void shareChatonOffWithoutUser(){
+        // given
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.empty());
+        //when
+        Assertions.assertThrows(CustomApiException.class, () -> mypageService.shareChatOnOff(user.getUsername(), true));
+    }
+
+    @DisplayName("쉐어챗의 상태값 변경시 마이페이지가 없으면 CustomApiException을 던지며 실패.")
+    @Test
+    public void shareChatonOffWithoutMypage(){
+        // given
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.ofNullable(user));
+        when(mypageRepository.findByUser(user)).thenReturn(null);
+        //when
+        Assertions.assertThrows(CustomApiException.class, () -> mypageService.shareChatOnOff(user.getUsername(), true));
+    }
+
+
+    @DisplayName("쉐어챗의 상태값 변경시 성공.")
+    @Test
+    public void shareChatOnOff(){
+        // given
+        Mypage targetMypage = newMockMypage(1L, "title", "백엔드개발자");
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.ofNullable(user));
+        when(mypageRepository.findByUser(user)).thenReturn(targetMypage);
+        //when
+        mypageService.shareChatOnOff(user.getUsername(), true);
+
+        // then
+        verify(userRepository).findByUsername(user.getUsername());
+        verify(mypageRepository).findByUser(user);
     }
 
 
