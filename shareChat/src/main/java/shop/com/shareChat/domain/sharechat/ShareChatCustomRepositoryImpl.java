@@ -52,6 +52,7 @@ public class ShareChatCustomRepositoryImpl implements ShareChatCustomRepository{
         ).from(sharechat)
                 .leftJoin( sharechat, userSharechat.sharechat)
                 .leftJoin( mypage.user, userSharechat.receiver)
+                .fetchJoin()
                 .where(sharechat.state.eq(state))
                 .fetch();
     }
@@ -69,6 +70,7 @@ public class ShareChatCustomRepositoryImpl implements ShareChatCustomRepository{
                         )
                 ).from(userSharechat)
                 .leftJoin(userSharechat.sharechat, sharechat)
+                .fetchJoin()
                 .where(userSharechat.receiver.eq(user), sharechat.date.eq(date) , sharechat.state.eq(2).or(sharechat.state.eq(1)))
                 .fetch();
     }

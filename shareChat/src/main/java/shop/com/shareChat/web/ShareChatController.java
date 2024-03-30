@@ -61,7 +61,7 @@ public class ShareChatController {
     @DeleteMapping("/{shareChatId}")
     @LoginCheck
     public ResponseEntity<?> deleteShareChat(@PathVariable Long shareChatId, @LoginUser SessionUser user){
-        boolean result = sharechatService.delteShareChat(shareChatId);
+        boolean result = sharechatService.deleteShareChat(shareChatId);
         return new ResponseEntity<>(new HttpResponseDto<>(1, "내 쉐어챗 시간 삭제", result), HttpStatus.CREATED);
     }
 }

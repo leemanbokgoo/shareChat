@@ -35,6 +35,7 @@ public class ShareTimeCustomRepositoryImpl implements ShareTimeCustomRepository 
                         )
                 ).from(sharetime)
                 .leftJoin(userSharechat.sharechat, sharechat)
+                .fetchJoin()
                 .where(sharetime.user.eq(user))
                 .fetch();
 

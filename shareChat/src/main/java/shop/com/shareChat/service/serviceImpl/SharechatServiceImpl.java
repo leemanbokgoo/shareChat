@@ -114,7 +114,7 @@ public class SharechatServiceImpl implements SharechatService {
     }
     @Transactional
     @Override
-    public boolean delteShareChat(Long shareChatId) {
+    public boolean deleteShareChat(Long shareChatId) {
 
         Sharechat sharechat = shareChatRepository.findById(shareChatId)
                 .orElseThrow(()-> new CustomApiException(ErrorCode.SHARECHAT_NOT_FOUND));

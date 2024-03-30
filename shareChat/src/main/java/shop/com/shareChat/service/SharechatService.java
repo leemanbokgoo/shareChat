@@ -22,6 +22,6 @@ public interface SharechatService {
     List<ShareChatMyListResDto> getMyList(String username, int state);
 
     // 쉐어챗 삭제
-    boolean delteShareChat(Long shareChatId);
+    boolean deleteShareChat(Long shareChatId);
 
 }

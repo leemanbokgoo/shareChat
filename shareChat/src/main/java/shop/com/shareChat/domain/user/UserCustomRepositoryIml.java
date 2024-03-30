@@ -36,6 +36,7 @@ public class UserCustomRepositoryIml implements UserCustomRepository{
                 ).from(mypage)
                 .where( builder)
                 .leftJoin(mypage.user, user)
+                .fetchJoin()
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -50,6 +51,7 @@ public class UserCustomRepositoryIml implements UserCustomRepository{
                 .select(user.count())
                 .from(mypage)
                 .leftJoin(mypage.user, user)
+                .fetchJoin()
                 .where(builder)
                 .fetchOne();
         return count;
