@@ -12,8 +12,7 @@
 Java, Spring Boot, IntelliJ, MariaDb, Redis, Jenkins 
 
 ### ERD
-<img width="848" alt="스크린샷 2024-03-30 오후 7 31 47" src="https://github.com/leemanbokgoo/shareChat/assets/123913164/8b7ffe43-5e51-436b-9d5d-5750ea731730">
-
+<img width="825" alt="image" src="https://github.com/leemanbokgoo/shareChat/assets/123913164/612cae3d-c820-44eb-ba46-a47c821f3a27">
 ---
 
 
@@ -22,6 +21,9 @@ Java, Spring Boot, IntelliJ, MariaDb, Redis, Jenkins
 * 해당 프로젝트의 요구사항은 다음과 같습니다.
 
 [wikiLink](https://github.com/leemanbokgoo/shareChat/wiki)
+
+
+
 
 
 ---
