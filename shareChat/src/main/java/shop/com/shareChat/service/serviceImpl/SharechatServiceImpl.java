@@ -35,7 +35,9 @@ public class SharechatServiceImpl implements SharechatService {
     @Transactional
     @Override
     public ShareChatResDto save(ShareChatRepDto repDto, String receiverName, Long userId) {
+
         Sharechat sharechat = shareChatRepository.save(repDto.toEntity());
+
         if( sharechat != null ){
 
             // 중간 테이블 저장

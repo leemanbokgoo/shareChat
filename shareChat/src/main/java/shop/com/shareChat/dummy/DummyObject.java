@@ -1,12 +1,15 @@
 package shop.com.shareChat.dummy;
 
+import org.springframework.cglib.core.Local;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import shop.com.shareChat.domain.mypage.Mypage;
+import shop.com.shareChat.domain.sharechat.Sharechat;
 import shop.com.shareChat.domain.shartime.Sharetime;
 import shop.com.shareChat.domain.user.DayOfWeek;
 import shop.com.shareChat.domain.user.Role;
 import shop.com.shareChat.domain.user.User;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -67,4 +70,19 @@ public class DummyObject {
                 .build();
     }
 
+    protected Sharechat newMockShareChat(String content){
+        LocalTime time = LocalTime.now();
+        LocalDate date = LocalDate.now();
+        LocalDateTime dateTime = LocalDateTime.now();
+
+        return Sharechat.builder()
+                .content(content)
+                .endTime(time)
+                .startTime(time)
+                .date(date)
+                .state(2)
+                .updatedAt(dateTime)
+                .createdAt(dateTime)
+                .build();
+    }
 }

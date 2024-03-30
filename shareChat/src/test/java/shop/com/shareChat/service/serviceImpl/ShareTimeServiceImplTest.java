@@ -131,7 +131,7 @@ class ShareTimeServiceImplTest extends DummyObject {
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
         // when
         shareTimeService.getList(user.getId());
-        //then 
+        //then
         verify(shareTimeRepository).getList(user);
     }
 
