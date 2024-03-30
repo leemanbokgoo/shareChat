@@ -1,5 +1,6 @@
 package shop.com.shareChat.service.serviceImpl;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ import shop.com.shareChat.dto.sharetime.ShareTimeReqDto;
 import shop.com.shareChat.dummy.DummyObject;
 import shop.com.shareChat.ex.CustomApiException;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 
@@ -51,8 +53,8 @@ class ShareTimeServiceImplTest extends DummyObject {
     @Test
     void sharTimeWithoutUser() {
         // given
-        LocalTime startTIme = LocalTime.now();
-        ShareTimeReqDto reqDto = new ShareTimeReqDto(DayOfWeek.FRIDAY,startTIme, startTIme,30, user);
+        LocalTime date = LocalTime.now();
+        ShareTimeReqDto reqDto = new ShareTimeReqDto(DayOfWeek.FRIDAY,date, date,30, user);
 
         //when
         when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.empty());
@@ -67,8 +69,8 @@ class ShareTimeServiceImplTest extends DummyObject {
     void shareTimeoffOn() {
         // given
         User targetUser = newUser("test");
-        LocalTime startTime = LocalTime.now();
-        ShareTimeReqDto reqDto = new ShareTimeReqDto(DayOfWeek.FRIDAY, startTime, startTime, 30, targetUser);
+        LocalTime date = LocalTime.now();
+        ShareTimeReqDto reqDto = new ShareTimeReqDto(DayOfWeek.FRIDAY, date, date, 30, targetUser);
         //when
         when(userRepository.findByUsername(targetUser.getUsername())).thenReturn(Optional.ofNullable(targetUser));
         when(shareTimeRepository.save(any(Sharetime.class))).thenReturn(newMockShareTime());
@@ -77,6 +79,60 @@ class ShareTimeServiceImplTest extends DummyObject {
         shareTimeService.save(reqDto, targetUser.getUsername());
         verify(userRepository).findByUsername(targetUser.getUsername());
         verify(shareTimeRepository).save(any(Sharetime.class));
+    }
+
+    @DisplayName("존재하지않는 사용자의 시간설정을 수정하는 경우 CustomApiException 을 던지며 실패")
+    @Test
+    void updateShareTimeWithoutUser() {
+        // given
+        LocalTime date = LocalTime.now();
+        ShareTimeReqDto reqDto = new ShareTimeReqDto(DayOfWeek.FRIDAY,date, date,30, user);
+
+        //when
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.empty());
+
+        //then
+        assertThrows(CustomApiException.class, ()-> shareTimeService.update(reqDto, user.getUsername()));
+        verify(userRepository).findByUsername(any());
+    }
+
+    @DisplayName("쉐어챗 시간 설정 수정 성공")
+    @Test
+    void updateHsareTimeSuccess(){
+
+        //given
+        LocalTime date = LocalTime.now();
+        LocalDateTime datetime = LocalDateTime.now();
+        ShareTimeReqDto reqDto = new ShareTimeReqDto(DayOfWeek.FRIDAY,date, date,30, user);
+
+        //when
+        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.ofNullable(user));
+        assertDoesNotThrow(() -> {
+            shareTimeService.update(reqDto, user.getUsername());
+        });
+
+        verify(userRepository).findByUsername(user.getUsername());
+    }
+
+    @DisplayName("쉐어챗 시간 설정 조회시 사용자가 없는 경우 CustomApiException을 던지며 실패")
+    @Test
+    void getListWithoutUser(){
+        //given
+        when(userRepository.findById(user.getId())).thenReturn(Optional.empty());
+        // when
+        Assertions.assertThrows(CustomApiException.class, () -> shareTimeService.getList(user.getId()));
+    }
+
+
+    @DisplayName("쉐어챗 시간 설정 조회시 사용자가 없는 경우 CustomApiException을 던지며 실패")
+    @Test
+    void getListSuccess(){
+        //given
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        // when
+        shareTimeService.getList(user.getId());
+        //then 
+        verify(shareTimeRepository).getList(user);
     }
 
 }
